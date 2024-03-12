@@ -40,30 +40,18 @@
 
 module xtea(
             // Clock and reset.
-            clk,
-            reset_n,
+            input wire               clk,
+            input wire               reset_n,
 
             // Control.
-            cs,
-            we,
+            input wire               cs,
+            input wire               we,
 
             // Data ports.
-            address,
-            write_data,
-            read_data
+            input wire      [7 : 0]  address,
+            input wire      [31 : 0] write_data,
+            output wire     [31 : 0] read_data
            );
-  
-  //----------------------------------------------------------------
-  // Inputs.
-  //----------------------------------------------------------------  
-  input wire clk, reset_n, cs, we;
-  input wire  [7 : 0]  address;
-  input wire  [31 : 0] write_data;
-  
-  //----------------------------------------------------------------
-  // Output.
-  //----------------------------------------------------------------
-  output wire [31 : 0] read_data;
 
 
   //----------------------------------------------------------------

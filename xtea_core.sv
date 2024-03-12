@@ -38,34 +38,20 @@
 
 `default_nettype none
 
-module xtea_core(clk,
-                reset_n,
+module xtea_core(
+                 input wire           clk,
+                 input wire           reset_n,
 
-                encdec,
-                next,
-                ready,
+                 input wire           encdec,
+                 input wire           next,
+                 output wire          ready,
 
-                rounds,
-                key,
+                 input wire [5 : 0]   rounds,
+                 input wire [127 : 0] key,
 
-                block,
-                result
+                 input wire [63 : 0]  block,
+                 output wire [63 : 0] result
                 );
-				
-  //----------------------------------------------------------------
-  // Inputs.
-  //----------------------------------------------------------------
-  input wire clk, reset_n, encdec, next;
-  input wire [5:0] rounds;
-  input wire [127:0] key;
-  input wire [63:0] block;
-  
-  
-  //----------------------------------------------------------------
-  // Outputs.
-  //----------------------------------------------------------------
-  output wire ready;
-  output wire [63:0] result;
 
 
   //----------------------------------------------------------------
