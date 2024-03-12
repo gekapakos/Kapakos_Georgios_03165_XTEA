@@ -72,20 +72,7 @@ module tb_xtea_core();
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
-  xtea_core dut(
-                .clk(tclk),
-                .reset_n(reset_n),
-
-                .encdec(encdec),
-                .next(next),
-
-                .rounds(rounds),
-                .key(key),
-
-                .block(block),
-                .result(result),
-                .ready(ready)
-               );
+  xtea_core dut(.*);
 
 
   //----------------------------------------------------------------

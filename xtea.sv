@@ -129,20 +129,7 @@ module xtea(
   //----------------------------------------------------------------
   // core instantiation.
   //----------------------------------------------------------------
-  xtea_core core(
-                 .clk(clk),
-                 .reset_n(reset_n),
-
-                 .encdec(encdec_reg),
-                 .next(next_reg),
-                 .ready(core_ready),
-
-                 .rounds(rounds_reg),
-                 .key(core_key),
-
-                 .block(core_block),
-                 .result(core_result)
-                );
+  xtea_core core(.*);
 
 
   //----------------------------------------------------------------

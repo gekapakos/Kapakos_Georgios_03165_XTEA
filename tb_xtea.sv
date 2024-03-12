@@ -98,14 +98,14 @@ module tb_xtea();
   // Device Under Test.
   //----------------------------------------------------------------
   xtea dut(
-           .clk(clk),
-           .reset_n(reset_n),
+           .clk,
+           .reset_n,
 
-           .cs(cs),
-           .we(we),
+           .cs,
+           .we,
 
            .address(tb_address),
-           .write_data(write_data),
+           .write_data,
            .read_data(tb_read_data)
            );
 
