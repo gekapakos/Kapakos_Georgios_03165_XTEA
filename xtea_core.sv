@@ -119,7 +119,7 @@ module xtea_core(
   // All registers are positive edge triggered with asynchronous
   // active low reset. All registers have write enable.
   //----------------------------------------------------------------
-  always @ (posedge clk or negedge reset_n)
+  always_ff @ (posedge clk or negedge reset_n)
     begin: reg_update
       if (!reset_n)
         begin
@@ -158,7 +158,7 @@ module xtea_core(
   //
   // Datapath with state update logic.
   //----------------------------------------------------------------
-  always @*
+  always_comb
     begin : xtea_core_dp
       logic [31 : 0] keyw [0 : 3];
 
@@ -248,7 +248,7 @@ module xtea_core(
   //
   // Update logic for the round counter.
   //----------------------------------------------------------------
-  always @*
+  always_comb
     begin : round_ctr
       round_ctr_new = 6'h0;
       round_ctr_we  = 1'h0;
@@ -269,7 +269,7 @@ module xtea_core(
   //
   // Control FSM for aes core.
   //----------------------------------------------------------------
-  always @*
+  always_comb
     begin : xtea_core_ctrl
       init_state    = 1'h0;
       update_v0     = 1'h0;

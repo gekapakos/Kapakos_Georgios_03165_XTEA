@@ -138,7 +138,7 @@ module xtea(
   // All registers are positive edge triggered with asynchronous
   // active low reset.
   //----------------------------------------------------------------
-  always @ (posedge clk or negedge reset_n)
+  always_ff @ (posedge clk or negedge reset_n)
     begin : reg_update
       integer i;
 
@@ -180,7 +180,7 @@ module xtea(
   //
   // The interface command decoding logic.
   //----------------------------------------------------------------
-  always @*
+  always_comb
     begin : api
       rounds_we     = 1'h0;
       next_new      = 1'h0;
