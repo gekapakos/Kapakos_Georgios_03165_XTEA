@@ -91,21 +91,21 @@ module xtea(
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
   //----------------------------------------------------------------
-  reg next_reg;
-  reg next_new;
+  logic next;
+  logic next_new;
 
-  reg encdec_reg;
-  reg config_we;
+  logic encdec;
+  logic config_we;
 
-  reg [31 : 0] block_reg [0 : 1];
-  reg          block_we;
+  logic [31 : 0] block_reg [0 : 1];
+  logic          block_we;
 
-  reg [31 : 0] key_reg [0 : 3];
-  reg          key_we;
+  logic [31 : 0] key_reg [0 : 3];
+  logic          key_we;
 
-  reg [5 : 0]  rounds_reg;
-  reg          rounds_we;
-  reg [31 : 0]   tmp_read_data;
+  logic [5 : 0]  rounds;
+  logic          rounds_we;
+  logic [31 : 0]   tmp_read_data;
 
   //----------------------------------------------------------------
   // Wires.

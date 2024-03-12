@@ -53,38 +53,38 @@ module tb_xtea_core();
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
-  reg [31 : 0] cycle_ctr;
-  reg [31 : 0] error_ctr;
-  reg [31 : 0] tc_ctr;
-  reg          tb_monitor;
+  logic [31 : 0] cycle_ctr;
+  logic [31 : 0] error_ctr;
+  logic [31 : 0] tc_ctr;
+  logic          tb_monitor;
 
-  reg           tb_clk;
-  reg           tb_reset_n;
-  reg           tb_encdec;
-  reg           tb_next;
-  wire          tb_ready;
-  reg [5 : 0]   tb_rounds;
-  reg [127 : 0] tb_key;
-  reg [63 : 0]  tb_block;
-  wire [63 : 0] tb_result;
+  logic           clk;
+  logic           reset_n;
+  logic           encdec;
+  logic           next;
+  wire          ready;
+  logic [5 : 0]   rounds;
+  logic [127 : 0] key;
+  logic [63 : 0]  block;
+  wire [63 : 0] result;
 
 
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
   xtea_core dut(
-                .clk(tb_clk),
-                .reset_n(tb_reset_n),
+                .clk(tclk),
+                .reset_n(reset_n),
 
-                .encdec(tb_encdec),
-                .next(tb_next),
+                .encdec(encdec),
+                .next(next),
 
-                .rounds(tb_rounds),
-                .key(tb_key),
+                .rounds(rounds),
+                .key(key),
 
-                .block(tb_block),
-                .result(tb_result),
-                .ready(tb_ready)
+                .block(block),
+                .result(result),
+                .ready(ready)
                );
 
 

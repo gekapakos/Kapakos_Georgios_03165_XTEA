@@ -76,34 +76,36 @@ module tb_xtea();
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
-  reg [31 : 0] cycle_ctr;
-  reg [31 : 0] error_ctr;
-  reg [31 : 0] tc_ctr;
-  reg          tb_monitor;
+  logic [31 : 0] cycle_ctr;
+  logic [31 : 0] error_ctr;
+  logic [31 : 0] tc_ctr;
+  logic          tb_monitor;
 
-  reg           tb_clk;
-  reg           tb_reset_n;
-  reg           tb_cs;
-  reg           tb_we;
-  reg [7 : 0]   tb_address;
-  reg [31 : 0]  tb_write_data;
+  logic           clk;
+  logic           reset_n;
+  logic           cs;
+  logic           we;
+  logic [7 : 0]   tb_address;
+  logic [31 : 0]  write_data;
   wire [31 : 0] tb_read_data;
 
-  reg [31 : 0] read_data;
+  logic [31 : 0] read_data;
+  logic [31 : 0] res0;
+  logic [31 : 0] res1;
 
 
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
   xtea dut(
-           .clk(tb_clk),
-           .reset_n(tb_reset_n),
+           .clk(clk),
+           .reset_n(reset_n),
 
-           .cs(tb_cs),
-           .we(tb_we),
+           .cs(cs),
+           .we(we),
 
            .address(tb_address),
-           .write_data(tb_write_data),
+           .write_data(write_data),
            .read_data(tb_read_data)
            );
 
@@ -116,7 +118,7 @@ module tb_xtea();
   always
     begin : clk_gen
       #CLK_HALF_PERIOD;
-      tb_clk = !tb_clk;
+      clk = !clk;
     end // clk_gen
 
 
@@ -161,9 +163,9 @@ module tb_xtea();
   task reset_dut;
     begin
       $display("*** Toggle reset.");
-      tb_reset_n = 0;
+      reset_n = 0;
       #(2 * CLK_PERIOD);
-      tb_reset_n = 1;
+      reset_n = 1;
     end
   endtask // reset_dut
 
@@ -201,12 +203,12 @@ module tb_xtea();
       tc_ctr     = 0;
       tb_monitor = 0;
 
-      tb_clk        = 1'h0;
-      tb_reset_n    = 1'h1;
-      tb_cs         = 1'h0;
-      tb_we         = 1'h0;
+      clk        = 1'h0;
+      reset_n    = 1'h1;
+      cs         = 1'h0;
+      we         = 1'h0;
       tb_address    = 8'h0;
-      tb_write_data = 32'h0;
+      write_data = 32'h0;
     end
   endtask // init_sim
 
@@ -226,12 +228,12 @@ module tb_xtea();
         end
 
       tb_address = address;
-      tb_write_data = word;
-      tb_cs = 1;
-      tb_we = 1;
+      write_data = word;
+      cs = 1;
+      we = 1;
       #(2 * CLK_PERIOD);
-      tb_cs = 0;
-      tb_we = 0;
+      cs = 0;
+      we = 0;
     end
   endtask // write_word
 
@@ -246,11 +248,11 @@ module tb_xtea();
   task read_word(input [11 : 0]  address);
     begin
       tb_address = address;
-      tb_cs = 1;
-      tb_we = 0;
+      cs = 1;
+      we = 0;
       #(CLK_PERIOD);
       read_data = tb_read_data;
-      tb_cs = 0;
+      cs = 0;
 
       if (DEBUG)
         begin
@@ -280,9 +282,6 @@ module tb_xtea();
   //----------------------------------------------------------------
   task tc1;
     begin : tc1
-      reg [31 : 0] res0;
-      reg [31 : 0] res1;
-
       tc_ctr = tc_ctr + 1;
 
       $display("*** TC1 - encryption started.");
@@ -326,8 +325,6 @@ module tb_xtea();
   //----------------------------------------------------------------
   task tc2;
     begin : tc2
-      reg [31 : 0] res0;
-      reg [31 : 0] res1;
 
       tc_ctr = tc_ctr + 1;
 
@@ -365,7 +362,6 @@ module tb_xtea();
       $display("");
     end
   endtask // tc2
-
 
   //----------------------------------------------------------------
   // xtea_core_test

@@ -68,41 +68,41 @@ module xtea_core(
 
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
-  //----------------------------------------------------------------
-  reg [31 : 0] v0_reg;
-  reg [31 : 0] v0_new;
-  reg          v0_we;
+  //---------------------------------------------------------------- 
+  logic [31 : 0] v0_reg;
+  logic [31 : 0] v0_new;
+  logic          v0_we;
 
-  reg [31 : 0] v1_reg;
-  reg [31 : 0] v1_new;
-  reg          v1_we;
+  logic [31 : 0] v1_reg;
+  logic [31 : 0] v1_new;
+  logic          v1_we;
 
-  reg [31 : 0] sum_reg;
-  reg [31 : 0] sum_new;
-  reg          sum_we;
+  logic [31 : 0] sum_reg;
+  logic [31 : 0] sum_new;
+  logic          sum_we;
 
-  reg          ready_reg;
-  reg          ready_new;
-  reg          ready_we;
+  logic          ready_reg;
+  logic          ready_new;
+  logic          ready_we;
 
-  reg [5 : 0]  round_ctr_reg;
-  reg [5 : 0]  round_ctr_new;
-  reg          round_ctr_rst;
-  reg          round_ctr_inc;
-  reg          round_ctr_we;
-
-  reg [1 : 0]  core_ctrl_reg;
-  reg [1 : 0]  core_ctrl_new;
-  reg          core_ctrl_we;
+  logic [5 : 0]  round_ctr_reg;
+  logic [5 : 0]  round_ctr_new;
+  logic          round_ctr_rst;
+  logic          round_ctr_inc;
+  logic          round_ctr_we;
+  
+  logic [1 : 0]  core_ctrl_reg;
+  logic [1 : 0]  core_ctrl_new;
+  logic          core_ctrl_we;
 
 
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg init_state;
-  reg update_v0;
-  reg update_v1;
-  reg update_sum;
+  logic init_state;
+  logic update_v0;
+  logic update_v1;
+  logic update_sum;
 
 
   //----------------------------------------------------------------
@@ -160,19 +160,19 @@ module xtea_core(
   //----------------------------------------------------------------
   always @*
     begin : xtea_core_dp
-      reg [31 : 0] keyw [0 : 3];
+      logic [31 : 0] keyw [0 : 3];
 
-      reg [31 : 0] v0_0;
-      reg [31 : 0] v0_0_0;
-      reg [31 : 0] v0_0_1;
-      reg [31 : 0] v0_1;
-      reg [31 : 0] v0_delta;
+      logic [31 : 0] v0_0;
+      logic [31 : 0] v0_0_0;
+      logic [31 : 0] v0_0_1;
+      logic [31 : 0] v0_1;
+      logic [31 : 0] v0_delta;
 
-      reg [31 : 0] v1_0;
-      reg [31 : 0] v1_0_0;
-      reg [31 : 0] v1_0_1;
-      reg [31 : 0] v1_1;
-      reg [31 : 0] v1_delta;
+      logic [31 : 0] v1_0;
+      logic [31 : 0] v1_0_0;
+      logic [31 : 0] v1_0_1;
+      logic [31 : 0] v1_1;
+      logic [31 : 0] v1_delta;
 
       v0_new  = 32'h0;
       v0_we   = 1'h0;
