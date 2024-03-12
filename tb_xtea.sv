@@ -362,6 +362,94 @@ module tb_xtea();
       $display("");
     end
   endtask // tc2
+  
+  //-------------------------------------------------//
+  /*Assertions*/
+  //--------------------------------------------------//
+  
+  /*(1)Assertion: Check if res1 is equal to 72612cb5(hex), when tc_ctr is equal to 2(hex)*/
+  assert property (
+    @(posedge clk) (tc_ctr==2) |-> (res1 == 'h72612cb5)
+  ) $display("(1)Assertion successful: res1 matches tc_ctr");
+  else $fatal("(1)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(2)Assertion: Check if write_data is equal to 2(hex), when tb_address is 8, 9, or 30(hex)*/
+  assert property (
+    @(posedge clk) (tb_address=='h08 || tb_address=='h09 || tb_address=='h30 || tb_address=='h31) |-> (write_data == 'h2)
+  ) $display("(2)Assertion successful: write_data meets its conditions");
+  else $fatal("(2)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(3)Assertion: Check if tb_address is equal to 9, 30 or 31(hex), when we is 0 and cs is 1(hex)*/
+  assert property (
+    @(posedge clk) (we==0 && cs==1) |-> (tb_address == 'h09 || tb_address == 'h30 || tb_address == 'h31)
+    ) $display("(3)Assertion successful: tb_address meets its conditions");
+    else $fatal("(3)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(4)If in this period the value of we is 1 then after 16 periods it should be 0.*/
+  assert property (
+    @(posedge clk) (we==1) |-> ##16 (we == 0)
+  ) $display("(4)Assertion successful: we meets its condition");
+  else $fatal("(4)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(5)If write_data is 1 then tb_address should be a(hex).*/
+  assert property (
+    @(posedge clk) (write_data==1) |-> (tb_address == 'h0a)
+  ) $display("(5)Assertion successful: tb_address is 'h0a when write_data is 1.");
+  else $fatal("(5)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(6)If read_data is 0(hex) then tb_address should be 9(hex).*/
+  assert property (
+    @(posedge clk) (read_data==0) |-> (tb_address =='h09)
+  ) $display("(6)Assertion successful: read_data is 0 when tb_address is 'h09.");
+  else $fatal("(6)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(7)If read_data is 0(hex) then tb_read_data should be 0(hex).*/
+  assert property (
+    @(posedge clk) (read_data==0) |-> (tb_read_data =='h0)
+  ) $display("(7)Assertion successful: tb_read_data is 0 when read_data is 0.");
+  else $fatal("(7)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(8)If write_data is 10203(hex) then tb_address should be 10(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h010203) |-> (tb_address == 'h10)
+  ) $display("(8)Assertion successful: tb_address is 'h10 when write_data is 'h010203.");
+  else $fatal("(8)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(9)If write_data is 4050607(hex) then tb_address should be 11(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h04050607) |-> (tb_address == 'h11)
+  ) $display("(9)Assertion successful: tb_address is 'h11 when write_data is 'h04050607.");
+  else $fatal("(9)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(10)If write_data is 8090a0b(hex) then tb_address should be 12(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h08090a0b) |-> (tb_address == 'h12)
+  ) $display("(10)Assertion successful: tb_address is 'h12 when write_data is 'h08090a0b.");
+  else $fatal("(10)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(11)If write_data is 0c0d0e0f(hex) then tb_address should be 13(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h0c0d0e0f) |-> (tb_address == 'h13)
+  ) $display("(11)Assertion successful: tb_address is 'h13 when write_data is 'h0c0d0e0f.");
+  else $fatal("(11)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(12)If write_data is 41424344(hex) then tb_address should be 20(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h41424344) |-> (tb_address == 'h20)
+  ) $display("(12)Assertion successful: tb_address is 'h20 when write_data is 'h41424344.");
+  else $fatal("(12)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(13)If write_data is 45464748(hex) then tb_address should be 21(hex).*/
+  assert property (
+    @(posedge clk) (write_data=='h45464748) |-> (tb_address == 'h21)
+  ) $display("(13)Assertion successful: tb_address is 'h20 when write_data is 'h45464748.");
+  else $fatal("(13)Assertion failed: Output does not match selected input at time %0t", $time);
+  
+  /*(15)If we is 1 then tb_read_data should be 0.*/
+  assert property (
+    @(posedge clk) (we=='h01) |-> (tb_read_data == 'h00)
+  ) $display("(15)Assertion successful: tb_read_data is 'h00 when we is 'h01.");
+  else $fatal("(15)Assertion failed: Output does not match selected input at time %0t", $time);
 
   //----------------------------------------------------------------
   // xtea_core_test

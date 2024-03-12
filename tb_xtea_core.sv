@@ -282,6 +282,26 @@ module tb_xtea_core();
       $display("");
     end
   endtask // tc2
+  
+  //-------------------------------------------------//
+  /*Assertions*/
+  //--------------------------------------------------//
+  
+  //(14)Assertion to check consistency in encryption/decryption result
+  assert property (
+    @(posedge clk) disable iff (!reset_n)
+      if (next)
+        $stable(result)
+  ) $display("(14)Assertion is successful: There is consistency in the result of the encryption/decryption");
+  else $fatal("(14)Assertion failed: Inconsistent result in XTEA");
+  
+  //(16) Assertion to check the cycle count during monitoring
+  assert property (
+    @(posedge clk) disable iff (~reset_n)
+      if (tb_monitor)
+        cycle_ctr == $past(cycle_ctr) + 1
+  )$display("(16)Assertion is successful: No problrms created counting cycles during monitoring");
+  else $fatal("(16)Assertion failed: Incorrect cycle count during monitoring in tb_environment");
 
 
   //----------------------------------------------------------------
