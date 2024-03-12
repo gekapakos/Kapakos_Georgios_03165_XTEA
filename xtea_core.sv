@@ -57,18 +57,14 @@ module xtea_core(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  localparam CTRL_IDLE    = 2'h0;
-  localparam CTRL_INIT    = 2'h1;
-  localparam CTRL_ROUNDS0 = 2'h2;
-  localparam CTRL_ROUNDS1 = 2'h3;
-
+  enum {CTRL_IDLE = 2'h0, CTRL_INIT = 2'h1, CTRL_ROUNDS0 = 2'h2, CTRL_ROUNDS1 = 2'h3} core_ctrl_reg, core_ctrl_new;
   localparam DELTA        = 32'h9e3779b9;
   localparam NUM_ROUNDS   = 32;
 
 
   //----------------------------------------------------------------
   // Registers including update variables and write enable.
-  //---------------------------------------------------------------- 
+  //----------------------------------------------------------------
   logic [31 : 0] v0_reg;
   logic [31 : 0] v0_new;
   logic          v0_we;
@@ -90,9 +86,8 @@ module xtea_core(
   logic          round_ctr_rst;
   logic          round_ctr_inc;
   logic          round_ctr_we;
-  
-  logic [1 : 0]  core_ctrl_reg;
-  logic [1 : 0]  core_ctrl_new;
+
+  //logic [1 : 0]  core_ctrl_new;
   logic          core_ctrl_we;
 
 
@@ -158,7 +153,7 @@ module xtea_core(
   //
   // Datapath with state update logic.
   //----------------------------------------------------------------
-  always_comb
+  always_comb 
     begin : xtea_core_dp
       logic [31 : 0] keyw [0 : 3];
 

@@ -57,14 +57,10 @@ module xtea(
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
-  localparam ADDR_NAME0        = 8'h00;
-  localparam ADDR_NAME1        = 8'h01;
-  localparam ADDR_VERSION      = 8'h02;
 
   localparam ADDR_CTRL         = 8'h08;
   localparam CTRL_NEXT_BIT     = 1;
 
-  localparam ADDR_STATUS       = 8'h09;
   localparam STATUS_READY_BIT  = 0;
 
   localparam ADDR_CONFIG       = 8'h0a;
@@ -111,10 +107,10 @@ module xtea(
   // Wires.
   //----------------------------------------------------------------
 
-  wire           core_ready;
-  wire [127 : 0] core_key;
-  wire [63 : 0]  core_block;
-  wire [63 : 0]  core_result;
+  wire           ready;
+  wire [127 : 0] key;
+  wire [63 : 0]  block;
+  wire [63 : 0]  result;
 
 
   //----------------------------------------------------------------
@@ -122,15 +118,18 @@ module xtea(
   //----------------------------------------------------------------
   assign read_data = tmp_read_data;
 
-  assign core_key = {key_reg[0], key_reg[1], key_reg[2], key_reg[3]};
-  assign core_block  = {block_reg[0], block_reg[1]};
+  assign key = {key_reg[0], key_reg[1], key_reg[2], key_reg[3]};
+  assign block  = {block_reg[0], block_reg[1]};
 
 
   //----------------------------------------------------------------
   // core instantiation.
   //----------------------------------------------------------------
   xtea_core core(.*);
-
+  
+  
+  enum {ADDR_NAME0 = 4'h0, ADDR_NAME1 = 4'h1, ADDR_VERSION = 4'h2, ADDR_STATUS = 4'h9} address_reg;
+ 
 
   //----------------------------------------------------------------
   // reg_update
@@ -142,29 +141,29 @@ module xtea(
     begin : reg_update
       integer i;
 
-      if (!reset_n)
+      if (reset_n == 0)//!
         begin
-          for (i = 0 ; i < 2 ; i = i + 1)
+          for (i = 0 ; i < 2 ; i++)
             block_reg[i] <= 32'h0;
 
-          for (i = 0 ; i < 4 ; i = i + 1)
+          for (i = 0 ; i < 4 ; i++)
             key_reg[i] <= 32'h0;
 
-          rounds_reg <= NUM_ROUNDS;
-          next_reg   <= 1'h0;
-          encdec_reg <= 1'h0;
+          rounds <= NUM_ROUNDS;
+          next   <= 1'h0;
+          encdec <= 1'h0;
         end
       else
         begin
-          next_reg <= next_new;
+          next <= next_new;
 
           if (config_we)
             begin
-              encdec_reg <= write_data[CONFIG_ENCDEC_BIT];
+              encdec <= write_data[CONFIG_ENCDEC_BIT];
             end
 
           if (rounds_we)
-            rounds_reg <= write_data[5 : 0];
+            rounds <= write_data[5 : 0];
 
           if (key_we)
             key_reg[address[1 : 0]] <= write_data;
@@ -193,7 +192,7 @@ module xtea(
         begin
           if (we)
             begin
-              if (core_ready)
+              if (ready)
                 begin
                   if (address == ADDR_CTRL)
                     next_new = write_data[CTRL_NEXT_BIT];
@@ -218,7 +217,7 @@ module xtea(
                 ADDR_NAME0:   tmp_read_data = CORE_NAME0;
                 ADDR_NAME1:   tmp_read_data = CORE_NAME1;
                 ADDR_VERSION: tmp_read_data = CORE_VERSION;
-                ADDR_STATUS:  tmp_read_data = {31'h0, core_ready};
+                ADDR_STATUS:  tmp_read_data = {31'h0, ready};
 
                 default:
                   begin
@@ -226,7 +225,7 @@ module xtea(
               endcase // case (address)
 
               if ((address >= ADDR_RESULT0) && (address <= ADDR_RESULT1))
-                tmp_read_data = core_result[(1 - (address - ADDR_RESULT0)) * 32 +: 32];
+                tmp_read_data = result[(1 - (address - ADDR_RESULT0)) * 32 +: 32];
             end
         end
     end // addr_decoder
